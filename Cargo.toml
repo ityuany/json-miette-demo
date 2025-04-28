@@ -9,3 +9,4 @@ miette     = { version = "7.5.0", features = ["derive", "fancy"] }
 # biome_json_syntax = "0.5.7"
 biome_json_parser        = { git = "https://github.com/biomejs/biome.git", tag = "biome_json_parser/v0.5.7", package = "biome_json_parser" }
 biome_json_syntax        = { git = "https://github.com/biomejs/biome.git", tag = "biome_json_syntax/v0.5.7", package = "biome_json_syntax" }
+semver = "1.0.15"

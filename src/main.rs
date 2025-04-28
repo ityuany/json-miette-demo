@@ -1,7 +1,10 @@
 use biome_json_parser::{JsonParserOptions, parse_json};
-use miette::{LabeledSpan, SourceSpan, miette};
+use miette::{
+    Context, GraphicalReportHandler, IntoDiagnostic, LabeledSpan, Result, SourceSpan, miette,
+};
+use semver::Version;
 
-fn main() {
+fn main() -> Result<()> {
     let json = r#"
     {
         "name": "@shined/doctor",
@@ -59,8 +62,24 @@ fn main() {
                     "Wrong answer"
                 )
                 .with_source_code(source);
-                println!("{:?}", report)
+
+                let mut output = String::with_capacity(1024 * 1024);
+
+                let handler = GraphicalReportHandler::new_themed(miette::GraphicalTheme::unicode())
+                    .with_context_lines(100);
+
+                handler.render_report(&mut output, report.as_ref()).unwrap();
+
+                println!("{}", output);
             }
         }
     }
+    let version = "1.2.x";
+    let version: Version = version
+        .parse()
+        .into_diagnostic()
+        .wrap_err("Parsing this tool's semver version failed.")?;
+    println!("{}", version);
+
+    Ok(())
 }
